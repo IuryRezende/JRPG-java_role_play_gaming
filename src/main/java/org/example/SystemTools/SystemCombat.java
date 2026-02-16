@@ -1,6 +1,5 @@
 package org.example.SystemTools;
 
-import org.example.Armory.MageSpellsEnum;
 import org.example.model.Player;
 
 import java.util.Scanner;
@@ -14,6 +13,10 @@ public class SystemCombat {
     private static void showActions(){
         System.out.println("1-Attack  |  2-Defense  |  3-Get Status");
     }
+    private static void showHabilities(Player player){
+        System.out.println(player.getAbilities());
+    }
+
 
     public static void startCombat(Player p1, Player p2){
         while (p1.isLive() && p2.isLive()){
@@ -23,7 +26,9 @@ public class SystemCombat {
                 byte option = sc.nextByte();
                 switch (option) {
                     case 1:
-                        p1.attack(p2);
+                        showHabilities(p1);
+                        int choosedHability = sc.nextInt();
+                        p1.attack(choosedHability, p2);
                         break;
 
                     case 2:

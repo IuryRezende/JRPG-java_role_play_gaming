@@ -1,20 +1,18 @@
 package org.example.model;
 
-import org.example.Interface.Combatent;
 
-public abstract class Player implements Combatent {
+public abstract class Player{
     protected String name;
     private int defaultLife = 200;
     protected int life;
     protected int strength; // +defense | +life | +damage w/ two hand weapons per strength
     protected int agility;// +dodge | +criticalChance | +chance to deal 2 attack in one turn
-    protected int intelligence;// +mana | +debuffResistance (-chance to receive debuff, -rounds receiving debuff, -damage of debuff)|+damage on spells
+    protected int intelligence;// +mana | +debuffResistance (-chance to receive debuff, -rounds receiving debuff, -damage by debuff)|+damage on spells
     protected int defense;
     protected double dodge;
     protected int mana;
     protected double criticalChance;
     protected int debuffResistance;
-    private Combatent combatent;
 
     public Player() {}
 
@@ -55,16 +53,15 @@ public abstract class Player implements Combatent {
 
     public void setStrength(int strength) { this.strength = strength; }
 
-    @Override
+
     public void takeDamage(int damage) { life -= damage; }
 
-    public void attack(Combatent target){}
+    public abstract void attack(int numOfAbility, Player target);
 
     public void defense(){}
 
-    public boolean dodge(){ return Math.random() <= dodge;} //dodge não é uma ação, é uma passiva
+    public boolean dodge(){ return Math.random() <= dodge;} //dodge it's not an action, it's a passive
 
-    @Override
     public boolean isLive(){ return life > 0; }
 
     public String getSheet(){
@@ -93,7 +90,5 @@ public abstract class Player implements Combatent {
 
     }
 
-    public String getHabilities(){
-        return habilitiesList
-    }
+    public abstract String getAbilities();
 }
