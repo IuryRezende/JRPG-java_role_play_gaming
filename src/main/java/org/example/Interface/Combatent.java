@@ -4,7 +4,7 @@ public interface Combatent {
 
     void takeDamage(int damage);
     void attack(Combatent target);
-    void dodge();
+    boolean dodge();
     void defense();
     boolean isLive();
 }

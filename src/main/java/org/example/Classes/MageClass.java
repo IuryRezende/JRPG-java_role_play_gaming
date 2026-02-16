@@ -56,46 +56,4 @@ public class MageClass extends Player {
         }
     }
 
-    @Override
-    public void defense(){
-
-    }
-
-    @Override
-    public void dodge() { }
-
-    @Override
-    public boolean isLive() { return life <= 0; }
-
-
-    public String getSheet(){
-        String title = name + " Sheet";
-
-        StringBuilder sbSheet = new StringBuilder();
-        StringBuilder sbSpells = new StringBuilder();
-
-        for (MageSpellsEnum s : spellsList){
-            sbSpells.append(s.name()).append(" ");
-        }
-
-        int width = sbSpells.length() + 12;
-        int padding = (width - title.length())/2;
-
-        sbSheet.append("=".repeat(width)).append("\n")
-                .append(" ".repeat(padding)).append(title).append(" ".repeat(padding)).append("\n")
-                .append("=".repeat(width)).append("\n")
-                .append(String.format("| %-" + (width - 4) + "s |%n", "Life: " + life))
-                .append(String.format("| %-" + (width - 4) + "s |%n", "Strength: " + strength))
-                .append(String.format("| %-" + (width - 4) + "s |%n", "Agility: " + agility))
-                .append(String.format("| %-" + (width - 4) + "s |%n", "Intelligence: " + intelligence))
-                .append(String.format("| %-" + (width - 4) + "s |%n", "Defense: " + defense))
-                .append(String.format("| %-" + (width - 4) + "s |%n", "Dodge: " + dodge + "%"))
-                .append(String.format("| %-" + (width - 4) + "s |%n", "Mana: " + mana))
-                .append(String.format("| %-" + (width - 4) + "s |%n", "Critical Chance: " + criticalChance + "%"))
-                .append(String.format("| %-" + (width - 4) + "s |%n", "Debuff Resistance: " + debuffResistance))
-                .append("=".repeat(width));
-
-        return sbSheet.toString();
-
-    }
 }

@@ -4,7 +4,6 @@ import org.example.model.Player;
 
 public class AssassinClass extends Player {
 
-    private final String emoji = "🐱‍👤";
     private final int defaultDodge = 2;
 
     public AssassinClass() {}
@@ -20,9 +19,7 @@ public class AssassinClass extends Player {
     }
 
     @Override
-    public void dodge() {
-
-    }
+    public boolean dodge() { return true; }
 
     @Override
     public boolean isLive() {

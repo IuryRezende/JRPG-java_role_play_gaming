@@ -10,9 +10,9 @@ public abstract class Player implements Combatent {
     protected int agility;// +dodge | +criticalChance | +chance to deal 2 attack in one turn
     protected int intelligence;// +mana | +debuffResistance (-chance to receive debuff, -rounds receiving debuff, -damage of debuff)|+damage on spells
     protected int defense;
-    protected int dodge;
+    protected double dodge;
     protected int mana;
-    protected int criticalChance;
+    protected double criticalChance;
     protected int debuffResistance;
     private Combatent combatent;
 
@@ -25,9 +25,9 @@ public abstract class Player implements Combatent {
         this.intelligence += intelligence;
         life = defaultLife + (strength * 20);
         defense = strength * 4;
-        dodge = agility * 3;
+        dodge = ((double) agility * 2)/100;
         mana = intelligence * 50;
-        criticalChance = agility * 2;
+        criticalChance = ((double) agility * 3)/100;
         debuffResistance = intelligence * 5;
     }
 
@@ -43,7 +43,7 @@ public abstract class Player implements Combatent {
 
     public int getDefense() { return defense; }
 
-    public int getDodge() { return dodge; }
+    public double getDodge() { return dodge; }
 
     public int getMana() { return mana; }
 
@@ -51,7 +51,7 @@ public abstract class Player implements Combatent {
 
     public int getDebuffResistance() { return debuffResistance; }
 
-    public int getCriticalChance() { return criticalChance; }
+    public double getCriticalChance() { return criticalChance; }
 
     public void setStrength(int strength) { this.strength = strength; }
 
@@ -62,8 +62,38 @@ public abstract class Player implements Combatent {
 
     public void defense(){}
 
-    public void agility(){}
+    public boolean dodge(){ return Math.random() <= dodge;} //dodge não é uma ação, é uma passiva
 
     @Override
     public boolean isLive(){ return life > 0; }
+
+    public String getSheet(){
+        String title = name + " Sheet";
+
+        StringBuilder sbSheet = new StringBuilder();
+
+        int width = title.length() + 12;
+        int padding = (width - title.length())/2;
+
+        sbSheet.append("=".repeat(width)).append("\n")
+                .append(" ".repeat(padding)).append(title).append(" ".repeat(padding)).append("\n")
+                .append("=".repeat(width)).append("\n")
+                .append(String.format("| %-" + (width - 4) + "s |%n", "Life: " + life))
+                .append(String.format("| %-" + (width - 4) + "s |%n", "Strength: " + strength))
+                .append(String.format("| %-" + (width - 4) + "s |%n", "Agility: " + agility))
+                .append(String.format("| %-" + (width - 4) + "s |%n", "Intelligence: " + intelligence))
+                .append(String.format("| %-" + (width - 4) + "s |%n", "Defense: " + defense))
+                .append(String.format("| %-" + (width - 4) + "s |%n", "Dodge: " + dodge * 100 + "%"))
+                .append(String.format("| %-" + (width - 4) + "s |%n", "Mana: " + mana))
+                .append(String.format("| %-" + (width - 4) + "s |%n", "Critical Chance: " + criticalChance * 100 + "%"))
+                .append(String.format("| %-" + (width - 4) + "s |%n", "Debuff Resistance: " + debuffResistance))
+                .append("=".repeat(width));
+
+        return sbSheet.toString();
+
+    }
+
+    public String getHabilities(){
+        return habilitiesList
+    }
 }

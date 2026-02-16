@@ -1,8 +1,7 @@
 package org.example;
 
-import org.example.Armory.MageSpellsEnum;
-import org.example.Classes.AssassinClass;
-import org.example.Classes.MageClass;
+import org.example.Armory.*;
+import org.example.Classes.*;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
