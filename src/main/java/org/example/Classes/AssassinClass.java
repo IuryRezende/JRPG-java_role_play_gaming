@@ -19,10 +19,25 @@ public class AssassinClass extends Player {
     }
 
     @Override
+    public void attack(int numOfAbility, Player target) {
+
+    }
+
+    @Override
     public boolean dodge() { return true; }
 
     @Override
     public boolean isLive() {
         return false;
+    }
+
+    @Override
+    public void showAbilities() {
+
+    }
+
+    @Override
+    public void describeAbilities() {
+
     }
 }

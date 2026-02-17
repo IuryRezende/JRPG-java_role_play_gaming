@@ -28,4 +28,5 @@ public enum MageSpellsEnum {
     public int getManaCost() { return manaCost; }
 
     public void setManaCost(int manaCost) { this.manaCost = manaCost; }
+
 }
