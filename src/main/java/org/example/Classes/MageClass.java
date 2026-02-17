@@ -6,6 +6,8 @@ import org.example.model.Player;
 
 import java.util.*;
 
+import static org.example.SystemTools.SystemCombat.awaitEnter;
+
 
 public class MageClass extends Player {
 
@@ -20,38 +22,36 @@ public class MageClass extends Player {
 
 
     public MageClass(String name, int strength, int agility, int intelligence) {
-        super(name, strength, agility, intelligence);
-        int defaultIntelligence = 2;
-        this.intelligence += defaultIntelligence;
+        super(name, strength, agility, intelligence + 2);
 
     }
 
     public void attack(int numOfAbility, Player target){
-        Map<String, String> spell = Map.of(
-                "name", spellsList.get(numOfAbility - 1).name(),
-                "emoji", spellsList.get(numOfAbility - 1).getEmoji(),
-                "manaCost", String.valueOf(spellsList.get(numOfAbility - 1).getManaCost()),
-                "damage", String.valueOf(spellsList.get(numOfAbility - 1).getDamage())
-        );
+
+        MageSpellsEnum spell = spellsList.get(numOfAbility - 1);
 
         try {
-            if (!checkIfHasMana(Integer.parseInt(spell.get("manaCost")))){
+            if (!checkIfHasMana(spell.getManaCost())){
                 throw new RuntimeException("Not enough mana to conjure this spell❌");
+            } else {
+                mana -= spell.getManaCost();
             }
-            int damage = calcDamage(Integer.parseInt(spell.get("damage")), target.getDefense());
+
+            int damage = calcDamage(spell.getDamage(), target.getDefense());
             target.takeDamage(damage);
-            System.out.println("\n=============================================\n"
+            System.out.println("\n"+"━".repeat(40) +"\n"
                     + this.getName()
                     + " conjured "
-                    + spell.get("name")
+                    + spell.name()
                     + " "
-                    + spell.get("emoji")
+                    + spell.getEmoji()
                     + "\n"
                     + target.getName()
                     + " suffered: "
                     + damage
                     + " points of damage"
-                    + "\n=============================================\n");
+                    + "\n"+"━".repeat(40) +"\n");
+            awaitEnter();
         } catch (RuntimeException e){
             System.out.println(e.getMessage());
         }

@@ -4,6 +4,7 @@ package org.example.model;
 public abstract class Player{
     protected String name;
     private int defaultLife = 200;
+    protected int maxLife;
     protected int life;
     protected int strength; // +defense ┃ +life | +damage w/ two hand weapons per strength
     protected int agility;// +dodge | +criticalChance | +chance to deal 2 attack in one turn
@@ -11,6 +12,7 @@ public abstract class Player{
     protected int defense;
     protected double dodge;
     protected int mana;
+    protected int maxMana;
     protected double criticalChance;
     protected int debuffResistance;
 
@@ -21,12 +23,14 @@ public abstract class Player{
         this.strength = strength;
         this.agility += agility;
         this.intelligence += intelligence;
-        life = defaultLife + (strength * 20);
-        defense = strength * 4;
-        dodge = ((double) agility * 2)/100;
-        mana = intelligence * 50;
-        criticalChance = ((double) agility * 3)/100;
-        debuffResistance = intelligence * 5;
+        life = defaultLife + (this.strength * 20);
+        maxLife = life;
+        defense = this.strength * 4;
+        dodge = ((double) this.agility * 2)/100;
+        mana = this.intelligence * 50;
+        maxMana=mana;
+        criticalChance = ((double) this.agility * 3)/100;
+        debuffResistance = this.intelligence * 5;
     }
 
     public int getAgility() { return agility; }
@@ -53,6 +57,11 @@ public abstract class Player{
 
     public void setStrength(int strength) { this.strength = strength; }
 
+    public int getLife() { return life; }
+
+    public int getMaxLife() { return maxLife; }
+
+    public int getMaxMana() { return maxMana; }
 
     public void takeDamage(int damage) { life -= damage; }
 

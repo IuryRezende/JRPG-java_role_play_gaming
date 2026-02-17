@@ -9,8 +9,8 @@ import org.example.SystemTools.SystemCombat;
 public class Main {
     public static void main(String[] args) {
         try {
-            MageClass p1 = new MageClass("PaulinPinho", 2, 4, 4);
-            MageClass p2 = new MageClass("Fimosis", 4, 3, 3);
+            MageClass p1 = new MageClass("IuryDoGr", 2, 4, 4);
+            MageClass p2 = new MageClass("12", 4, 3, 3);
 
             SystemCombat.startCombat(p1, p2);
         } catch (RuntimeException e) {
