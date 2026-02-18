@@ -2,6 +2,8 @@ package org.example.Classes;
 
 
 import org.example.Armory.MageSpellsEnum;
+import org.example.Exceptions.AttackMissed;
+import org.example.Exceptions.InsufficientMana;
 import org.example.model.Player;
 
 import java.util.*;
@@ -13,7 +15,16 @@ public class MageClass extends Player {
 
     private final List<MageSpellsEnum> spellsList = new ArrayList<>(Arrays.asList(MageSpellsEnum.values()));
 
-    private int calcDamage(int damage, int enemyDefense){ return enemyDefense >= damage ? 0 : damage - enemyDefense; };
+    private int calcDamage(int damage, int enemyDefense){
+        int totalDamage = damage;
+        if (criticalDamage()){
+            totalDamage *= 2;
+            System.out.println("\n"+"━".repeat(30));
+            System.out.println(" ".repeat(5) + "Critical damage !!!");
+            System.out.print("━".repeat(30));
+        }
+        return Math.max(0, totalDamage - enemyDefense) ;
+    };
 
     private boolean checkIfHasMana(int manaCost){ return mana >= manaCost; }
 
@@ -32,28 +43,36 @@ public class MageClass extends Player {
 
         try {
             if (!checkIfHasMana(spell.getManaCost())){
-                throw new RuntimeException("Not enough mana to conjure this spell❌");
+                throw new InsufficientMana("Not enough mana to conjure this spell❌");
             } else {
                 mana -= spell.getManaCost();
             }
 
             int damage = calcDamage(spell.getDamage(), target.getDefense());
+
+            if (target.dodge()){
+                throw new AttackMissed(target.getName(), this.getName());
+            }
             target.takeDamage(damage);
-            System.out.println("\n"+"━".repeat(40) +"\n"
-                    + this.getName()
+            System.out.println("\n"+"━".repeat(60) +"\n"
+                    + " ".repeat(5) + this.getName()
                     + " conjured "
                     + spell.name()
                     + " "
                     + spell.getEmoji()
                     + "\n"
-                    + target.getName()
+                    + " ".repeat(5) + target.getName()
                     + " suffered: "
                     + damage
                     + " points of damage"
-                    + "\n"+"━".repeat(40) +"\n");
+                    + "\n"+"━".repeat(60) +"\n");
+            System.out.print("Press Enter to go back");
             awaitEnter();
-        } catch (RuntimeException e){
+        } catch (InsufficientMana | AttackMissed e){
+            System.out.println("━".repeat(50));
             System.out.println(e.getMessage());
+            System.out.println("━".repeat(50));
+            awaitEnter();
         }
     }
 

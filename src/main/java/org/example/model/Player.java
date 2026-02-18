@@ -1,20 +1,27 @@
 package org.example.model;
 
 
+
 public abstract class Player{
     protected String name;
-    private int defaultLife = 200;
-    protected int maxLife;
+    private boolean defending = false;
+    private final int bonusDefending = 15;
+    private final int defaultLife = 200;
     protected int life;
     protected int strength; // +defense ┃ +life | +damage w/ two hand weapons per strength
     protected int agility;// +dodge | +criticalChance | +chance to deal 2 attack in one turn
     protected int intelligence;// +mana | +debuffResistance (-chance to receive debuff, -rounds receiving debuff, -damage by debuff)|+damage on spells
+
     protected int defense;
     protected double dodge;
     protected int mana;
-    protected int maxMana;
     protected double criticalChance;
     protected int debuffResistance;
+
+    protected int maxLife;
+    protected int maxMana;
+
+
 
     public Player() {}
 
@@ -25,10 +32,10 @@ public abstract class Player{
         this.intelligence += intelligence;
         life = defaultLife + (this.strength * 20);
         maxLife = life;
-        defense = this.strength * 4;
-        dodge = ((double) this.agility * 2)/100;
+        defense += this.strength * 4;
+        dodge = ((double) this.agility * 3)/100;
         mana = this.intelligence * 50;
-        maxMana=mana;
+        maxMana = mana;
         criticalChance = ((double) this.agility * 3)/100;
         debuffResistance = this.intelligence * 5;
     }
@@ -45,6 +52,10 @@ public abstract class Player{
 
     public int getDefense() { return defense; }
 
+    public void removeDefending(){
+        defense -= bonusDefending;
+    }
+
     public double getDodge() { return dodge; }
 
     public int getMana() { return mana; }
@@ -57,6 +68,8 @@ public abstract class Player{
 
     public void setStrength(int strength) { this.strength = strength; }
 
+    public boolean criticalDamage(){ return Math.random() <= criticalChance;}
+
     public int getLife() { return life; }
 
     public int getMaxLife() { return maxLife; }
@@ -67,7 +80,12 @@ public abstract class Player{
 
     public abstract void attack(int numOfAbility, Player target);
 
-    public void defense(){}
+    public void defense(){
+        defending = true;
+        defense += bonusDefending;
+    }
+
+    public boolean isDefending(){ return defending;}
 
     public boolean dodge(){ return Math.random() <= dodge;} //dodge it's not an action, it's a passive
 

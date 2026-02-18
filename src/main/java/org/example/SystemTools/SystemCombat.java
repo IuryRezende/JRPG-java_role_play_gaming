@@ -1,12 +1,14 @@
 package org.example.SystemTools;
 
 import org.example.Exceptions.InvalidValueException;
+import org.example.Exceptions.PlayerDied;
 import org.example.model.Player;
 
-import java.util.Map;
 import java.util.Scanner;
 
 public class SystemCombat {
+    private static int p1TurnCount = 0;
+    private static int p2TurnCount = 0;
     private final static Scanner sc = new Scanner(System.in);
 
     private static int getAvailableSpace(String name){
@@ -120,6 +122,25 @@ public class SystemCombat {
                     break;
 
                 case 5:
+                    String p1DefTitle = "Def: " + playerOfTurn.getDefense();
+                    int boxPaddingDefP1 = (boxWidth - p1DefTitle.length())/2;
+                    arena.append("┃").append(" ".repeat(distanceAtTheCard1));
+                    arena.append("┃").append(" ".repeat(boxPaddingDefP1))
+                            .append(String.format("%-"+ p1DefTitle.length() +"s", p1DefTitle))
+                            .append(" ".repeat(getAvailableSpace(p1DefTitle) % 2 == 0 ? boxPaddingDefP1 : boxPaddingDefP1 + 1)).append("┃");
+
+                    arena.append(" ".repeat(distanceBtwCards));
+
+                    String p2DefTitle = "Def: " + p2.getDefense();
+                    int boxPaddingDefP2 = (boxWidth - p2DefTitle.length())/2;
+                    arena.append("┃").append(" ".repeat(boxPaddingDefP2))
+                            .append(String.format("%-8s", p2DefTitle))
+                            .append(" ".repeat(getAvailableSpace(p2DefTitle) % 2 == 0 ? boxPaddingDefP2 - 2 : boxPaddingDefP2)).append("┃");
+
+                    arena.append(" ".repeat(distanceAtTheCard2)).append("┃\n");
+                    break;
+
+                case 6:
                     arena.append("┃").append(" ".repeat(distanceAtTheCard1));
 
                     //first card
@@ -147,12 +168,10 @@ public class SystemCombat {
         arena.append("┗").append("━".repeat(width)).append("┛\n");
 
         System.out.println(arena);
+
     }
 
-    public static void awaitEnter(){
-        sc.nextLine();
-        sc.nextLine();
-    }
+
     private static String getActions(){
         return "1-Attack"
                 + " ".repeat(2)
@@ -165,16 +184,19 @@ public class SystemCombat {
 
     private static void startRound(Player playerOfTurn, Player p2) throws InvalidValueException {
         showArena(playerOfTurn, p2);
+        System.out.print("Enter the action: ");
 
         byte option = sc.nextByte();
         switch (option) {
             case 1:
                 playerOfTurn.showAbilities();
-                int choosedAbility = sc.nextInt();
+                byte choosedAbility = sc.nextByte();
 
                 if (choosedAbility == 4){
                     playerOfTurn.describeAbilities();
+                    System.out.print("Press Enter to go back");
                     awaitEnter();
+
                     startRound(playerOfTurn, p2);
                     break;
                 }
@@ -182,35 +204,56 @@ public class SystemCombat {
                 break;
 
             case 2:
+                if (playerOfTurn.isDefending()){
+                    System.out.println("You're already defending!");
+                    awaitEnter();
+
+                    startRound(playerOfTurn,p2);
+                    break;
+                }
                 playerOfTurn.defense();
                 break;
 
             case 3:
                 playerOfTurn.getStatus();
+                System.out.print("Press Enter to go back");
                 awaitEnter();
+
                 startRound(playerOfTurn, p2);
                 break;
 
             default:
-                throw new InvalidValueException();
+                throw new InvalidValueException("Invalid value, try again!");
         }
     }
 
 
+    public static void awaitEnter(){
+        sc.nextLine();
+        sc.nextLine();
+    }
+
     public static void startCombat(Player p1, Player p2){
-        while (p1.isLive() && p2.isLive()){
+        while (true){
             try{
                 //first argument is the player of the turn
+                if (!p1.isLive()){
+                    throw new PlayerDied(p1.getName(), p2.getName());
+                }
+                p1TurnCount++;
                 startRound(p1, p2);
 
-                if (p2.isLive()){
-                    startRound(p2, p1);
+
+                if (!p2.isLive()){
+                    throw new PlayerDied(p2.getName(), p1.getName());
                 }
+                startRound(p2, p1);
+                p2TurnCount++;
 
-
-            } catch (InvalidValueException e) {
+            } catch (InvalidValueException | PlayerDied e) {
                 System.out.println(e.getMessage());
                 break;
+
             }
         }
     }

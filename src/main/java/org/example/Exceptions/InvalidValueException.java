@@ -1,7 +1,7 @@
 package org.example.Exceptions;
 
 public class InvalidValueException extends Exception {
-    public InvalidValueException() {
-        super("Invalid value!");
+    public InvalidValueException(String msg) {
+        super(msg);
     }
 }
