@@ -7,8 +7,7 @@ import org.example.model.Player;
 import java.util.Scanner;
 
 public class SystemCombat {
-    private static int p1TurnCount = 0;
-    private static int p2TurnCount = 0;
+    private static int roundCount = 1;
     private final static Scanner sc = new Scanner(System.in);
 
     private static int getAvailableSpace(String name){
@@ -183,6 +182,10 @@ public class SystemCombat {
     }
 
     private static void startRound(Player playerOfTurn, Player p2) throws InvalidValueException {
+        if (playerOfTurn.isDefending()){
+            playerOfTurn.removeDefending();
+        }
+
         showArena(playerOfTurn, p2);
         System.out.print("Enter the action: ");
 
@@ -237,18 +240,20 @@ public class SystemCombat {
         while (true){
             try{
                 //first argument is the player of the turn
-                if (!p1.isLive()){
-                    throw new PlayerDied(p1.getName(), p2.getName());
-                }
-                p1TurnCount++;
                 startRound(p1, p2);
-
 
                 if (!p2.isLive()){
                     throw new PlayerDied(p2.getName(), p1.getName());
                 }
+
                 startRound(p2, p1);
-                p2TurnCount++;
+
+                if (!p1.isLive()){
+                    throw new PlayerDied(p1.getName(), p2.getName());
+                }
+
+
+                roundCount++;
 
             } catch (InvalidValueException | PlayerDied e) {
                 System.out.println(e.getMessage());

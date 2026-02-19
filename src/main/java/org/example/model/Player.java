@@ -3,8 +3,8 @@ package org.example.model;
 
 
 public abstract class Player{
-    protected String name;
-    private boolean defending = false;
+    private String name;
+    private boolean defending;
     private final int bonusDefending = 15;
     private final int defaultLife = 200;
     protected int life;
@@ -12,14 +12,14 @@ public abstract class Player{
     protected int agility;// +dodge | +criticalChance | +chance to deal 2 attack in one turn
     protected int intelligence;// +mana | +debuffResistance (-chance to receive debuff, -rounds receiving debuff, -damage by debuff)|+damage on spells
 
-    protected int defense;
-    protected double dodge;
+    private int defense;
+    private double dodge;
     protected int mana;
-    protected double criticalChance;
-    protected int debuffResistance;
+    private double criticalChance;
+    private int debuffResistance;
 
-    protected int maxLife;
-    protected int maxMana;
+    private int maxLife;
+    private int maxMana;
 
 
 
@@ -53,6 +53,7 @@ public abstract class Player{
     public int getDefense() { return defense; }
 
     public void removeDefending(){
+        defending = false;
         defense -= bonusDefending;
     }
 
@@ -81,8 +82,13 @@ public abstract class Player{
     public abstract void attack(int numOfAbility, Player target);
 
     public void defense(){
+
         defending = true;
         defense += bonusDefending;
+
+        System.out.println("━".repeat(100));
+        System.out.println(" ".repeat(5) + name + " started to defending, the next damage taken will receive -" + defense + " points of damage");
+        System.out.println("━".repeat(100));
     }
 
     public boolean isDefending(){ return defending;}
