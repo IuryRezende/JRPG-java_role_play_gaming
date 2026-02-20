@@ -22,7 +22,6 @@ public class BarbarianClass extends Player{
     }
 
     public void attack(int numOfAbility, Player target){
-
         BarbarianWeaponsEnum weapon = weaponsList.get(numOfAbility - 1);
 
         try {

@@ -86,7 +86,9 @@ public abstract class Player{
 
     public void takeDamage(int damage) { life -= damage; }
 
-    public abstract void attack(int numOfAbility, Player target);
+    public void attack(int numOfAbility, Player target){
+        ArmoryInterface weapon =
+    }
 
     public void defense(){
 

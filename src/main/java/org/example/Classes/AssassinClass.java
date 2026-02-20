@@ -18,10 +18,6 @@ public class AssassinClass extends Player {
 
     }
 
-    @Override
-    public void attack(int numOfAbility, Player target) {
-
-    }
 
     @Override
     public boolean dodge() { return true; }
