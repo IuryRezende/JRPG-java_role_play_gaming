@@ -42,6 +42,7 @@ public abstract class Player{
         defense += this.strength * 4;
         dodge = ((double) this.agility * 3)/100;
         mana = this.intelligence * 50;
+        stamina = (this.strength * 20) + (this.agility * 25);
         maxMana = mana;
         criticalChance = ((double) this.agility * 3)/100;
         debuffResistance = this.intelligence * 5;
@@ -87,7 +88,18 @@ public abstract class Player{
     public void takeDamage(int damage) { life -= damage; }
 
     public void attack(int numOfAbility, Player target){
-        ArmoryInterface weapon =
+         ArmoryInterface weapon = getAbility(numOfAbility - 1);
+
+        try{
+            dealDamage(weapon, target);
+
+        } catch (InsufficientMana | AttackMissed e){
+            System.out.println("━".repeat(50));
+            System.out.println(e.getMessage());
+            System.out.println("━".repeat(50));
+            awaitEnter();
+        }
+
     }
 
     public void defense(){
@@ -182,6 +194,7 @@ public abstract class Player{
                 .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Defense: " + defense))
                 .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Dodge: " + dodge * 100 + "%"))
                 .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Mana: " + mana))
+                .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Stamina: " + stamina))
                 .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Critical Chance: " + criticalChance * 100 + "%"))
                 .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Debuff Resistance: " + debuffResistance))
                 .append("┗").append("━".repeat(width)).append("┛");
@@ -189,6 +202,8 @@ public abstract class Player{
         System.out.println(sbStatus.toString());
 
     }
+
+    public abstract ArmoryInterface getAbility(int index);
 
     public abstract void showAbilities();
 

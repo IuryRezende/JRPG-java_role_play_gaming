@@ -26,21 +26,6 @@ public class MageClass extends Player {
 
     }
 
-    public void attack(int numOfAbility, Player target){
-
-        MageSpellsEnum spell = spellsList.get(numOfAbility - 1);
-
-        try {
-            dealDamage(spell, target);
-
-        } catch (InsufficientMana | AttackMissed e){
-            System.out.println("━".repeat(50));
-            System.out.println(e.getMessage());
-            System.out.println("━".repeat(50));
-            awaitEnter();
-        }
-    }
-
     @Override
     public void describeAbilities(){
 
@@ -114,6 +99,11 @@ public class MageClass extends Player {
 
         System.out.println(description);
 
+    }
+
+    @Override
+    public MageSpellsEnum getAbility(int index){
+        return spellsList.get(index);
     }
 
     @Override

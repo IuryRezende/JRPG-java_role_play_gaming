@@ -1,5 +1,7 @@
 package org.example.SystemTools;
 
+import org.example.Exceptions.InsufficientMana;
+import org.example.Exceptions.InsufficientStamina;
 import org.example.Exceptions.InvalidValueException;
 import org.example.Exceptions.PlayerDied;
 import org.example.model.Player;
@@ -188,6 +190,7 @@ public class SystemCombat {
         }
 
         showArena(playerOfTurn, p2);
+
         System.out.print("Enter the action: ");
         byte option = sc.nextByte();
 
@@ -200,7 +203,7 @@ public class SystemCombat {
                     playerOfTurn.describeAbilities();
                     awaitEnter();
 
-                    startRound(playerOfTurn, p2);
+                    startCombat(playerOfTurn, p2);
                     break;
                 }
                 playerOfTurn.attack(choosedAbility, p2);
@@ -211,7 +214,7 @@ public class SystemCombat {
                     System.out.println("You're already defending!");
                     awaitEnter();
 
-                    startRound(playerOfTurn,p2);
+                    startCombat(playerOfTurn,p2);
                     break;
                 }
                 playerOfTurn.defense();
@@ -221,22 +224,21 @@ public class SystemCombat {
                 playerOfTurn.getStatus();
                 awaitEnter();
 
-                startRound(playerOfTurn, p2);
+                startCombat(playerOfTurn, p2);
                 break;
 
             default:
                 System.out.println("Invalid value, try again!");
                 awaitEnter();
 
-                startRound(playerOfTurn, p2);
                 break;
         }
     }
 
 
     public static void awaitEnter(){
-        System.out.print("Press ENTER to continue");
         sc.nextLine();
+        System.out.print("Press ENTER to continue");
         sc.nextLine();
     }
 
@@ -262,11 +264,17 @@ public class SystemCombat {
             } catch (PlayerDied e) {
                 System.out.println(e.getMessage());
                 break;
+            } catch (InsufficientMana | InsufficientStamina e){
+                System.out.println(e.getMessage());
+                awaitEnter();
 
+                startCombat(p1,p2);
             } catch (InputMismatchException e){
                 sc.nextLine();
                 System.out.println(e.getMessage());
-                startRound(p1,p2);
+                awaitEnter();
+
+                startCombat(p1,p2);
             }
         }
     }

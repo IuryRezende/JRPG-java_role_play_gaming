@@ -22,7 +22,7 @@ public class Main {
 //            System.out.println("Enter the name of P2: ");
 //            String p2Name = formatName(sc.nextLine());
 
-            MageClass p1 = new MageClass("Maradonna", 2, 4, 4);
+            BarbarianClass p1 = new BarbarianClass("Maradonna", 2, 4, 4);
             MageClass p2 = new MageClass("CR7", 4, 3, 3);
 
             SystemCombat.startCombat(p1, p2);

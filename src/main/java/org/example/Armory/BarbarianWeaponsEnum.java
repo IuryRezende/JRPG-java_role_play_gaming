@@ -7,14 +7,13 @@ import java.util.List;
 
 public enum BarbarianWeaponsEnum implements ArmoryInterface{
     AXE(50, 0,30,"🪓"),
-    HAMMER(100, 0, 70,"🔥"),
-    PUNCH(20, 0, 30, "❄");
+    HAMMER(100, 0, 70,"🔨"),
+    PUNCH(20, 0, 10, "👊");
 
     private final int damage;
     private final int manaCost;
     private final int staminaCost;
     private final String emoji;
-    private List<BarbarianWeaponsEnum> weaponsEnumList = new ArrayList<>(Arrays.asList(BarbarianWeaponsEnum.values()));
 
     BarbarianWeaponsEnum(int damage, int manaCost, int staminaCost, String emoji){
         this.damage = damage;
@@ -38,9 +37,4 @@ public enum BarbarianWeaponsEnum implements ArmoryInterface{
 
     @Override
     public int getManaCost() { return manaCost; }
-
-    public BarbarianWeaponsEnum getAbilityPerIndex(int index){
-        return weaponsEnumList.get(index);
-    }
-
 }

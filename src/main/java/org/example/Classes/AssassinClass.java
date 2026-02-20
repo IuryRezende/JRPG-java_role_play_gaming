@@ -1,5 +1,6 @@
 package org.example.Classes;
 
+import org.example.Armory.ArmoryInterface;
 import org.example.model.Player;
 
 public class AssassinClass extends Player {
@@ -25,6 +26,11 @@ public class AssassinClass extends Player {
     @Override
     public boolean isLive() {
         return false;
+    }
+
+    @Override
+    public ArmoryInterface getAbility(int index) {
+        return null;
     }
 
     @Override

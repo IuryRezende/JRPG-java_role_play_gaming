@@ -1,5 +1,6 @@
 package org.example.Classes;
 
+import org.example.Armory.ArmoryInterface;
 import org.example.Armory.BarbarianWeaponsEnum;
 import org.example.Exceptions.AttackMissed;
 import org.example.Exceptions.InsufficientMana;
@@ -21,18 +22,10 @@ public class BarbarianClass extends Player{
 
     }
 
-    public void attack(int numOfAbility, Player target){
-        BarbarianWeaponsEnum weapon = weaponsList.get(numOfAbility - 1);
 
-        try {
-            dealDamage(weapon, target);
-
-        } catch (InsufficientMana | AttackMissed e){
-            System.out.println("━".repeat(50));
-            System.out.println(e.getMessage());
-            System.out.println("━".repeat(50));
-            awaitEnter();
-        }
+    @Override
+    public ArmoryInterface getAbility(int index) {
+        return weaponsList.get(index);
     }
 
     @Override
@@ -42,7 +35,7 @@ public class BarbarianClass extends Player{
         StringBuilder titleSb = new StringBuilder();
         StringBuilder topBorder = new StringBuilder();
         StringBuilder bottomBorder = new StringBuilder();
-        int width = 50;
+        int width = 80;
         int sectionWidth = width / weaponsList.size();
         int padding = (width - title.length())/2;
 
@@ -70,7 +63,10 @@ public class BarbarianClass extends Player{
 
         //Showing the name of weapons
         for (BarbarianWeaponsEnum weapon : weaponsList){
-            description.append(String.format(" %-" + (sectionWidth - 2) + "s ┃", weapon.name()));
+            int sectionPadding = (sectionWidth - weapon.name().length())/2;
+            description.append(String.format(" ".repeat(sectionPadding)
+                    + "%s"
+                    + " ".repeat(weapon.name().length() % 2 == 0 ? sectionPadding : sectionPadding + 1) + "┃", weapon.name()));
         }
 
         description.append("\n┣");
@@ -91,7 +87,7 @@ public class BarbarianClass extends Player{
         description.append("\n┃ ");
 
         for (BarbarianWeaponsEnum weapon : weaponsList) {
-            description.append(String.format("%-" + (sectionWidth - 2) + "s ┃ ", "Mana Cost: " + weapon.getStaminaCost()));
+            description.append(String.format("%-" + (sectionWidth - 2) + "s ┃ ", "Stamina Cost: " + weapon.getStaminaCost()));
         }
 
         description.append("\n┗");
