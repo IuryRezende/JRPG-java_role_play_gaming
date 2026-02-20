@@ -10,7 +10,7 @@ public class AssassinClass extends Player {
 
 
     public AssassinClass(String name, int life) {
-        agility += defaultDodge;
+        setAgility(defaultDodge);
     }
 
     @Override

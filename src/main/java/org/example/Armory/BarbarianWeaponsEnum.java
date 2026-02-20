@@ -1,17 +1,17 @@
 package org.example.Armory;
 
 
-public enum MageSpellsEnum implements ArmoryInterface{
-    KATCHAU(50, 60, 0,"⚡"),
-    FIREBALL(30, 50, 0,"🔥"),
-    FREEZE(10, 30, 0,"❄");
+public enum BarbarianWeaponsEnum implements ArmoryInterface{
+    AXE(50, 0,30,"🪓"),
+    HAMMER(100, 0, 70,"🔥"),
+    PUNCH(20, 0, 30, "❄");
 
     private final int damage;
     private final int manaCost;
     private final int staminaCost;
     private final String emoji;
 
-    MageSpellsEnum(int damage, int manaCost, int staminaCost, String emoji){
+    BarbarianWeaponsEnum(int damage, int manaCost, int staminaCost, String emoji){
         this.damage = damage;
         this.manaCost = manaCost;
         this.staminaCost = staminaCost;
@@ -20,7 +20,7 @@ public enum MageSpellsEnum implements ArmoryInterface{
     }
 
     @Override
-    public String getName() { return name(); }
+    public String getName() {return name(); }
 
     @Override
     public int getDamage() { return damage; }

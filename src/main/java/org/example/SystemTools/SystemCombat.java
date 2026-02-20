@@ -4,6 +4,7 @@ import org.example.Exceptions.InvalidValueException;
 import org.example.Exceptions.PlayerDied;
 import org.example.model.Player;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class SystemCombat {
@@ -181,15 +182,15 @@ public class SystemCombat {
                 + "3-Get Status";
     }
 
-    private static void startRound(Player playerOfTurn, Player p2) throws InvalidValueException {
+    private static void startRound(Player playerOfTurn, Player p2) throws PlayerDied, InputMismatchException {
         if (playerOfTurn.isDefending()){
             playerOfTurn.removeDefending();
         }
 
         showArena(playerOfTurn, p2);
         System.out.print("Enter the action: ");
-
         byte option = sc.nextByte();
+
         switch (option) {
             case 1:
                 playerOfTurn.showAbilities();
@@ -197,7 +198,6 @@ public class SystemCombat {
 
                 if (choosedAbility == 4){
                     playerOfTurn.describeAbilities();
-                    System.out.print("Press Enter to go back");
                     awaitEnter();
 
                     startRound(playerOfTurn, p2);
@@ -219,19 +219,23 @@ public class SystemCombat {
 
             case 3:
                 playerOfTurn.getStatus();
-                System.out.print("Press Enter to go back");
                 awaitEnter();
 
                 startRound(playerOfTurn, p2);
                 break;
 
             default:
-                throw new InvalidValueException("Invalid value, try again!");
+                System.out.println("Invalid value, try again!");
+                awaitEnter();
+
+                startRound(playerOfTurn, p2);
+                break;
         }
     }
 
 
     public static void awaitEnter(){
+        System.out.print("Press ENTER to continue");
         sc.nextLine();
         sc.nextLine();
     }
@@ -255,10 +259,14 @@ public class SystemCombat {
 
                 roundCount++;
 
-            } catch (InvalidValueException | PlayerDied e) {
+            } catch (PlayerDied e) {
                 System.out.println(e.getMessage());
                 break;
 
+            } catch (InputMismatchException e){
+                sc.nextLine();
+                System.out.println(e.getMessage());
+                startRound(p1,p2);
             }
         }
     }

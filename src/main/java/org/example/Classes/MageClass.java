@@ -15,18 +15,7 @@ public class MageClass extends Player {
 
     private final List<MageSpellsEnum> spellsList = new ArrayList<>(Arrays.asList(MageSpellsEnum.values()));
 
-    private int calcDamage(int damage, int enemyDefense){
-        int totalDamage = damage;
-        if (criticalDamage()){
-            totalDamage *= 2;
-            System.out.println("\n"+"━".repeat(30));
-            System.out.println(" ".repeat(5) + "Critical damage !!!");
-            System.out.print("━".repeat(30));
-        }
-        return Math.max(0, totalDamage - enemyDefense) ;
-    };
 
-    private boolean checkIfHasMana(int manaCost){ return mana >= manaCost; }
 
 
     public MageClass(){};
@@ -42,32 +31,8 @@ public class MageClass extends Player {
         MageSpellsEnum spell = spellsList.get(numOfAbility - 1);
 
         try {
-            if (!checkIfHasMana(spell.getManaCost())){
-                throw new InsufficientMana("Not enough mana to conjure this spell❌");
-            } else {
-                mana -= spell.getManaCost();
-            }
+            dealDamage(spell, target);
 
-            int damage = calcDamage(spell.getDamage(), target.getDefense());
-
-            if (target.dodge()){
-                throw new AttackMissed(target.getName(), this.getName());
-            }
-            target.takeDamage(damage);
-            System.out.println("\n"+"━".repeat(60) +"\n"
-                    + " ".repeat(5) + this.getName()
-                    + " conjured "
-                    + spell.name()
-                    + " "
-                    + spell.getEmoji()
-                    + "\n"
-                    + " ".repeat(5) + target.getName()
-                    + " suffered: "
-                    + damage
-                    + " points of damage"
-                    + "\n"+"━".repeat(60) +"\n");
-            System.out.print("Press Enter to go back");
-            awaitEnter();
         } catch (InsufficientMana | AttackMissed e){
             System.out.println("━".repeat(50));
             System.out.println(e.getMessage());

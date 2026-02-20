@@ -1,0 +1,7 @@
+1 - implements the system of stamina
+2 - while defending, recover stamina
+3 - how much strength, less stamina cost to makes a attack
+4 - apply chance of debuff for one attack per class, example:
+    (Mage)FREEZE - will low the defense of the opponent per 1 turn,
+    (Barbarian)HAMMER - chance to stun the opponent per 1 turn,
+    (Assassin)DRACULA'S KNIFE - chance of life steal
