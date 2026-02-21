@@ -1,6 +1,7 @@
 package org.example.Classes;
 
 
+import org.example.Armory.ArmoryInterface;
 import org.example.Armory.MageSpellsEnum;
 import org.example.Exceptions.AttackMissed;
 import org.example.Exceptions.InsufficientMana;
@@ -24,6 +25,19 @@ public class MageClass extends Player {
     public MageClass(String name, int strength, int agility, int intelligence) {
         super(name, strength, agility, intelligence + 2);
 
+    }
+
+    @Override
+    protected int calcDamage(ArmoryInterface weapon, int enemyDefense) {
+        int damage = weapon.getDamage();
+        int totalDamage = (int)(damage * (1 + (getIntelligence() * 0.05)));
+        if (criticalDamage()){
+            totalDamage *= 2;
+            System.out.println("\n"+"━".repeat(30));
+            System.out.println(" ".repeat(5) + "Critical damage !!!");
+            System.out.print("━".repeat(30));
+        }
+        return Math.max(0, totalDamage - enemyDefense);
     }
 
     @Override
@@ -117,6 +131,7 @@ public class MageClass extends Player {
         abilities.append(" 4-Describe Abilities");
         System.out.println(abilities);
     }
+
 
 
 }

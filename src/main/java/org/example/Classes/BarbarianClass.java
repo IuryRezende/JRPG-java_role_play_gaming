@@ -117,4 +117,18 @@ public class BarbarianClass extends Player{
         abilities.append(" 4-Describe Abilities");
         System.out.println(abilities);
     }
+
+    @Override
+    protected int calcDamage(ArmoryInterface weapon, int enemyDefense) {
+        int damage = weapon.getDamage();
+        int totalDamage = (int)(damage * (1 + (getStrength() * 0.05)));
+
+        if (criticalDamage()){
+            totalDamage *= 2;
+            System.out.println("\n"+"━".repeat(30));
+            System.out.println(" ".repeat(5) + "Critical damage !!!");
+            System.out.print("━".repeat(30));
+        }
+        return Math.max(0, totalDamage - enemyDefense);
+    }
 }

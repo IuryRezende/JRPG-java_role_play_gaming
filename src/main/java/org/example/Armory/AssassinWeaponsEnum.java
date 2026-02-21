@@ -1,13 +1,8 @@
 package org.example.Armory;
 
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-public enum BarbarianWeaponsEnum implements ArmoryInterface{
-    AXE(50, 0,30,"🪓", " hacked with an AXE"),
-    HAMMER(100, 0, 70,"🔨", " slammed with a HAMMER"),
+public enum AssassinWeaponsEnum implements ArmoryInterface{
+    DOUBLE_DAGGERS(50, 0,30,"🪓", " hacked with an AXE"),
+    POISONED_KNIFE(100, 0, 70,"🔨", " slammed with a HAMMER"),
     PUNCH(30, 0, 15, "👊", " punched 3 times");
 
     private final int damage;
@@ -16,13 +11,12 @@ public enum BarbarianWeaponsEnum implements ArmoryInterface{
     private final String emoji;
     private final String hitDescription;
 
-    BarbarianWeaponsEnum(int damage, int manaCost, int staminaCost, String emoji, String hitDescription){
+    AssassinWeaponsEnum(int damage, int manaCost, int staminaCost, String emoji, String hitDescription){
         this.damage = damage;
         this.manaCost = manaCost;
         this.staminaCost = staminaCost;
         this.emoji = emoji;
         this.hitDescription = hitDescription;
-
     }
 
     @Override

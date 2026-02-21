@@ -27,6 +27,7 @@ public abstract class Player{
 
     private int maxLife;
     private int maxMana;
+    private int maxStamina;
 
 
 
@@ -42,32 +43,34 @@ public abstract class Player{
         defense += this.strength * 4;
         dodge = ((double) this.agility * 3)/100;
         mana = this.intelligence * 50;
-        stamina = (this.strength * 20) + (this.agility * 25);
         maxMana = mana;
+        stamina = (this.strength * 20) + (this.agility * 25);
+        maxStamina = stamina;
         criticalChance = ((double) this.agility * 3)/100;
         debuffResistance = this.intelligence * 5;
     }
 
+    public int getLife() { return life; }
+
+    public int getMaxLife() { return maxLife; }
+
     public int getAgility() { return agility; }
 
-    public void setAgility(int agility) { this.agility = agility; }
-
     public int getIntelligence() { return intelligence; }
-
-    public void setIntelligence(int intelligence) { this.intelligence = intelligence; }
 
     public int getStrength() { return strength; }
 
     public int getDefense() { return defense; }
 
-    public void removeDefending(){
-        defending = false;
-        defense -= bonusDefending;
-    }
-
     public double getDodge() { return dodge; }
 
     public int getMana() { return mana; }
+
+    public int getMaxMana() { return maxMana; }
+
+    public int getStamina() { return stamina; }
+
+    public int getMaxStamina() { return maxStamina; }
 
     public String getName() { return name; }
 
@@ -75,15 +78,8 @@ public abstract class Player{
 
     public double getCriticalChance() { return criticalChance; }
 
-    public void setStrength(int strength) { this.strength = strength; }
-
     public boolean criticalDamage(){ return Math.random() <= criticalChance;}
 
-    public int getLife() { return life; }
-
-    public int getMaxLife() { return maxLife; }
-
-    public int getMaxMana() { return maxMana; }
 
     public void takeDamage(int damage) { life -= damage; }
 
@@ -112,6 +108,11 @@ public abstract class Player{
         System.out.println("━".repeat(82));
     }
 
+    public void removeDefending(){
+        defending = false;
+        defense -= bonusDefending;
+    }
+
     public boolean isDefending(){ return defending;}
 
     public boolean dodge(){ return Math.random() <= dodge;} //dodge it's not an action, it's a passive
@@ -138,16 +139,7 @@ public abstract class Player{
 
     protected boolean checkIfHasStamina(int staminaCost){ return stamina >= staminaCost; }
 
-    private int calcDamage(int damage, int enemyDefense){
-        int totalDamage = damage;
-        if (criticalDamage()){
-            totalDamage *= 2;
-            System.out.println("\n"+"━".repeat(30));
-            System.out.println(" ".repeat(5) + "Critical damage !!!");
-            System.out.print("━".repeat(30));
-        }
-        return Math.max(0, totalDamage - enemyDefense) ;
-    };
+    protected abstract int calcDamage(ArmoryInterface weapon, int enemyDefense);
 
     protected void dealDamage(ArmoryInterface weapon, Player target){
         consumeStamina(weapon.getStaminaCost());
@@ -157,16 +149,13 @@ public abstract class Player{
             throw new AttackMissed(target.getName(), this.getName());
         }
 
-        int damage = calcDamage(weapon.getDamage(), target.getDefense());
+        int damage = calcDamage(weapon, target.getDefense());
 
         target.takeDamage(damage);
 
         System.out.println("\n"+"━".repeat(60) +"\n"
                 + " ".repeat(5) + this.getName()
-                + " conjured "
-                + weapon.getName()
-                + " "
-                + weapon.getEmoji()
+                + weapon.getHitDescription()
                 + "\n"
                 + " ".repeat(5) + target.getName()
                 + " suffered: "

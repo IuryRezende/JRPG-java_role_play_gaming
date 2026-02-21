@@ -81,6 +81,7 @@ public class SystemCombat {
                     arena.append(" ".repeat(distanceAtTheCard2)).append("┃\n");
                     break;
 
+                //HP line
                 case 3:
                     String titleVS = "VS";
                     String p1HPTitle = "HP: " + playerOfTurn.getLife() + "/" + playerOfTurn.getMaxLife();
@@ -104,6 +105,7 @@ public class SystemCombat {
                     arena.append(" ".repeat(distanceAtTheCard2)).append("┃\n");
                     break;
 
+                //mana line
                 case 4:
                     String p1ManaTitle = "Mana: " + playerOfTurn.getMana() + "/" + playerOfTurn.getMaxMana();
                     int boxPaddingManaP1 = (boxWidth - p1ManaTitle.length())/2;
@@ -123,7 +125,27 @@ public class SystemCombat {
                     arena.append(" ".repeat(distanceAtTheCard2)).append("┃\n");
                     break;
 
+                //Stamina Line
                 case 5:
+                    String p1StaminaTitle = "Stamina: " + playerOfTurn.getStamina() + "/" + playerOfTurn.getMaxStamina();
+                    int boxPaddingStaminaP1 = (boxWidth - p1StaminaTitle.length())/2;
+                    arena.append("┃").append(" ".repeat(distanceAtTheCard1));
+                    arena.append("┃").append(" ".repeat(boxPaddingStaminaP1))
+                            .append(String.format("%-12s", p1StaminaTitle))
+                            .append(" ".repeat(getAvailableSpace(p1StaminaTitle) % 2 == 0 ? boxPaddingStaminaP1 : boxPaddingStaminaP1 + 1)).append("┃");
+
+                    arena.append(" ".repeat(distanceBtwCards));
+
+                    String p2StaminaTitle = "Stamina: " + p2.getStamina() + "/" + p2.getMaxStamina();
+                    int boxPaddingStaminaP2 = (boxWidth - p2StaminaTitle.length())/2;
+                    arena.append("┃").append(" ".repeat(boxPaddingStaminaP2))
+                            .append(String.format("%-12s", p2StaminaTitle))
+                            .append(" ".repeat(getAvailableSpace(p1StaminaTitle) % 2 == 0 ? boxPaddingStaminaP1 : boxPaddingStaminaP1 + 1)).append("┃");
+
+                    arena.append(" ".repeat(distanceAtTheCard2)).append("┃\n");
+                    break;
+                //Def line
+                case 6:
                     String p1DefTitle = "Def: " + playerOfTurn.getDefense();
                     int boxPaddingDefP1 = (boxWidth - p1DefTitle.length())/2;
                     arena.append("┃").append(" ".repeat(distanceAtTheCard1));
@@ -142,7 +164,8 @@ public class SystemCombat {
                     arena.append(" ".repeat(distanceAtTheCard2)).append("┃\n");
                     break;
 
-                case 6:
+                //Bottom style of the card
+                case 7:
                     arena.append("┃").append(" ".repeat(distanceAtTheCard1));
 
                     //first card
@@ -184,7 +207,7 @@ public class SystemCombat {
                 + "3-Get Status";
     }
 
-    private static void startRound(Player playerOfTurn, Player p2) throws PlayerDied, InputMismatchException {
+    private static void startRound(Player playerOfTurn, Player p2) throws PlayerDied, InputMismatchException, InvalidValueException {
         if (playerOfTurn.isDefending()){
             playerOfTurn.removeDefending();
         }
@@ -228,10 +251,7 @@ public class SystemCombat {
                 break;
 
             default:
-                System.out.println("Invalid value, try again!");
-                awaitEnter();
-
-                break;
+                throw new InvalidValueException("Invalid value, try again");
         }
     }
 
@@ -264,7 +284,7 @@ public class SystemCombat {
             } catch (PlayerDied e) {
                 System.out.println(e.getMessage());
                 break;
-            } catch (InsufficientMana | InsufficientStamina e){
+            } catch (InsufficientMana | InsufficientStamina | InvalidValueException e){
                 System.out.println(e.getMessage());
                 awaitEnter();
 

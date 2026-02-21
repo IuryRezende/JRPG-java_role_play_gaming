@@ -6,4 +6,5 @@ public interface ArmoryInterface {
     String getEmoji();
     int getStaminaCost();
     int getManaCost();
+    String getHitDescription();
 }
