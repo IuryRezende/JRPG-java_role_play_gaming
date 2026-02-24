@@ -13,10 +13,11 @@ public class SystemCombat {
     private static int roundCount = 1;
     private final static Scanner sc = new Scanner(System.in);
 
-    private static int getAvailableSpace(String name){
+    public static int getAvaliableSpace(String name){
         int length = name.length();
         return Math.min(length, 10);
     }
+
 
     private static void showArena(Player playerOfTurn, Player p2){
         StringBuilder arena = new StringBuilder();
@@ -25,7 +26,7 @@ public class SystemCombat {
         int padding = (width - title.length())/2;
 
         arena.append("┏").append("━".repeat(width)).append("┓\n");
-        arena.append("┃").append(" ".repeat(padding)).append(title).append(" ".repeat(getAvailableSpace(playerOfTurn.getName()) % 2 == 0 ? padding + 1 : padding)).append("┃\n");
+        arena.append("┃").append(" ".repeat(padding)).append(title).append(" ".repeat(getAvaliableSpace(title) % 2 == 0 ? padding + 1 : padding)).append("┃\n");
         arena.append("┣").append("━".repeat(width)).append("┫\n");
 
         //Make the card
@@ -36,8 +37,8 @@ public class SystemCombat {
             int distanceAtTheCard1 = width / 8;
             int distanceBtwCards = width/6;
             int distanceAtTheCard2 = width/6;
-            int availableSpaceP1 = getAvailableSpace(playerOfTurn.getName());
-            int availableSpaceP2 = getAvailableSpace(p2.getName());
+            int availableSpaceP1 = getAvaliableSpace(playerOfTurn.getName());
+            int availableSpaceP2 = getAvaliableSpace(p2.getName());
 
             switch (i) {
                 //the top border of card
@@ -56,13 +57,13 @@ public class SystemCombat {
                             .append(" ".repeat(distanceAtTheCard1))
                             .append("┃").append(" ".repeat(boxPaddingP1))
                             .append(String.format("%-" + availableSpaceP1 + "s", playerOfTurn.getName()))
-                            .append(" ".repeat(getAvailableSpace(playerOfTurn.getName()) % 2 == 0 ? boxPaddingP1 : boxPaddingP1 + 1)).append("┃");
+                            .append(" ".repeat(getAvaliableSpace(playerOfTurn.getName()) % 2 == 0 ? boxPaddingP1 : boxPaddingP1 + 1)).append("┃");
 
                     arena.append(" ".repeat((distanceBtwCards)));
                     //p2 card
                     arena.append("┃").append(" ".repeat(boxPaddingP2))
                             .append(String.format("%-" + availableSpaceP2 + "s", p2.getName()))
-                            .append(" ".repeat(getAvailableSpace(p2.getName()) % 2 == 0 ? boxPaddingP2 : boxPaddingP2 + 1)).append("┃");
+                            .append(" ".repeat(getAvaliableSpace(p2.getName()) % 2 == 0 ? boxPaddingP2 : boxPaddingP2 + 1)).append("┃");
 
                     arena.append(" ".repeat((distanceAtTheCard2))).append("┃\n");
                     break;
@@ -132,7 +133,7 @@ public class SystemCombat {
                     arena.append("┃").append(" ".repeat(distanceAtTheCard1));
                     arena.append("┃").append(" ".repeat(boxPaddingStaminaP1))
                             .append(String.format("%-12s", p1StaminaTitle))
-                            .append(" ".repeat(getAvailableSpace(p1StaminaTitle) % 2 == 0 ? boxPaddingStaminaP1 : boxPaddingStaminaP1 + 1)).append("┃");
+                            .append(" ".repeat(getAvaliableSpace(p1StaminaTitle) % 2 == 0 ? boxPaddingStaminaP1 : boxPaddingStaminaP1 + 1)).append("┃");
 
                     arena.append(" ".repeat(distanceBtwCards));
 
@@ -140,7 +141,7 @@ public class SystemCombat {
                     int boxPaddingStaminaP2 = (boxWidth - p2StaminaTitle.length())/2;
                     arena.append("┃").append(" ".repeat(boxPaddingStaminaP2))
                             .append(String.format("%-12s", p2StaminaTitle))
-                            .append(" ".repeat(getAvailableSpace(p1StaminaTitle) % 2 == 0 ? boxPaddingStaminaP1 : boxPaddingStaminaP1 + 1)).append("┃");
+                            .append(" ".repeat(getAvaliableSpace(p1StaminaTitle) % 2 == 0 ? boxPaddingStaminaP1 : boxPaddingStaminaP1 + 1)).append("┃");
 
                     arena.append(" ".repeat(distanceAtTheCard2)).append("┃\n");
                     break;
@@ -151,7 +152,7 @@ public class SystemCombat {
                     arena.append("┃").append(" ".repeat(distanceAtTheCard1));
                     arena.append("┃").append(" ".repeat(boxPaddingDefP1))
                             .append(String.format("%-"+ p1DefTitle.length() +"s", p1DefTitle))
-                            .append(" ".repeat(getAvailableSpace(p1DefTitle) % 2 == 0 ? boxPaddingDefP1 : boxPaddingDefP1 + 1)).append("┃");
+                            .append(" ".repeat(getAvaliableSpace(p1DefTitle) % 2 == 0 ? boxPaddingDefP1 : boxPaddingDefP1 + 1)).append("┃");
 
                     arena.append(" ".repeat(distanceBtwCards));
 
@@ -159,7 +160,7 @@ public class SystemCombat {
                     int boxPaddingDefP2 = (boxWidth - p2DefTitle.length())/2;
                     arena.append("┃").append(" ".repeat(boxPaddingDefP2))
                             .append(String.format("%-8s", p2DefTitle))
-                            .append(" ".repeat(getAvailableSpace(p2DefTitle) % 2 == 0 ? boxPaddingDefP2 - 2 : boxPaddingDefP2)).append("┃");
+                            .append(" ".repeat(getAvaliableSpace(p2DefTitle) % 2 == 0 ? boxPaddingDefP2 - 2 : boxPaddingDefP2)).append("┃");
 
                     arena.append(" ".repeat(distanceAtTheCard2)).append("┃\n");
                     break;
@@ -222,7 +223,11 @@ public class SystemCombat {
                 playerOfTurn.showAbilities();
                 byte choosedAbility = sc.nextByte();
 
-                if (choosedAbility == 4){
+                if (choosedAbility < 0 || choosedAbility > playerOfTurn.getWeaponListLength()){
+                    throw new InvalidValueException("Invalid value");
+                }
+
+                if (choosedAbility == 0){
                     playerOfTurn.describeAbilities();
                     awaitEnter();
 

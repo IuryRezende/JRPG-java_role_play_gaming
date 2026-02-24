@@ -5,13 +5,15 @@ import org.example.Armory.ArmoryInterface;
 import org.example.Exceptions.AttackMissed;
 import org.example.Exceptions.InsufficientMana;
 import org.example.Exceptions.InsufficientStamina;
+import org.example.SystemTools.SystemCombat;
 
 import static org.example.SystemTools.SystemCombat.awaitEnter;
+import static org.example.SystemTools.SystemCombat.getAvaliableSpace;
 
 public abstract class Player{
     private String name;
-    private boolean defending;
-    private final int bonusDefending = 15;
+    protected boolean defending;
+    protected final int bonusDefending = 15;
     private final int defaultLife = 200;
     private int life;
     private int strength; // +defense ┃ +life | +damage w/ two hand weapons per strength
@@ -28,6 +30,8 @@ public abstract class Player{
     private int maxLife;
     private int maxMana;
     private int maxStamina;
+    protected int staminaRecover;
+    protected int manaRecover;
 
 
 
@@ -44,8 +48,10 @@ public abstract class Player{
         dodge = ((double) this.agility * 3)/100;
         mana = this.intelligence * 50;
         maxMana = mana;
+        manaRecover = (this.intelligence/2) * 20;
         stamina = (this.strength * 20) + (this.agility * 25);
         maxStamina = stamina;
+        staminaRecover = (this.agility/2) * 20;
         criticalChance = ((double) this.agility * 3)/100;
         debuffResistance = this.intelligence * 5;
     }
@@ -62,13 +68,19 @@ public abstract class Player{
 
     public int getDefense() { return defense; }
 
+    public void setDefense(int defense) { this.defense = defense; }
+
     public double getDodge() { return dodge; }
 
     public int getMana() { return mana; }
 
+    public void setMana(int mana) { this.mana = mana; }
+
     public int getMaxMana() { return maxMana; }
 
     public int getStamina() { return stamina; }
+
+    public void setStamina(int stamina) { this.stamina = stamina; }
 
     public int getMaxStamina() { return maxStamina; }
 
@@ -98,15 +110,7 @@ public abstract class Player{
 
     }
 
-    public void defense(){
-
-        defending = true;
-        defense += bonusDefending;
-
-        System.out.println("━".repeat(82));
-        System.out.println(" ".repeat(5) + name + " started to defending, your defense was increased +" + bonusDefending + " by 1 turn");
-        System.out.println("━".repeat(82));
-    }
+    public abstract void defense();
 
     public void removeDefending(){
         defending = false;
@@ -118,6 +122,8 @@ public abstract class Player{
     public boolean dodge(){ return Math.random() <= dodge;} //dodge it's not an action, it's a passive
 
     public boolean isLive(){ return life > 0; }
+
+    protected abstract void recoverStatus();
 
     protected void consumeMana(int manaCost){
         if (checkIfHasMana(manaCost)){
@@ -174,8 +180,9 @@ public abstract class Player{
         int padding = (width - title.length())/2;
 
         sbStatus.append("┏").append("━".repeat(width)).append("┓\n")
-                .append("┃").append(" ".repeat(padding)).append(title).append(" ".repeat(padding)).append("┃\n")
+                .append("┃").append(" ".repeat(padding)).append(title).append(" ".repeat(getAvaliableSpace(title) % 2 == 0 ? padding + 1 : padding)).append("┃\n")
                 .append("┣").append("━".repeat(width)).append("┫\n")
+                .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Class: " + getClass().getSimpleName().replace("Class", "")))
                 .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Life: " + life))
                 .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Strength: " + strength))
                 .append(String.format("┃ %-" + (width - 2) + "s ┃%n", "Agility: " + agility))
@@ -197,4 +204,7 @@ public abstract class Player{
     public abstract void showAbilities();
 
     public abstract void describeAbilities();
+
+    public abstract int getWeaponListLength();
+
 }

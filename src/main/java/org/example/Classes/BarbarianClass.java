@@ -22,6 +22,35 @@ public class BarbarianClass extends Player{
 
     }
 
+    @Override
+    public void defense(){
+
+        defending = true;
+        setDefense(getDefense() + bonusDefending);
+        recoverStatus();
+
+        System.out.println("━".repeat(82));
+        System.out.println(" ".repeat(5) + getName() + " started to defending, your defense was increased +" + bonusDefending + " by 1 turn");
+        System.out.println(" ".repeat(5) + "Recovered +" + staminaRecover + " points of stamina");
+        System.out.println("━".repeat(82));
+    }
+
+    private void recoverStamina(){
+        if(isDefending()){
+            if(getStamina() < getMaxStamina() - staminaRecover){
+                int totalStamina = getStamina() + staminaRecover;
+                setStamina(totalStamina);
+            } else {
+                setStamina(getMaxStamina());
+            }
+        }
+    }
+
+    @Override
+    protected void recoverStatus() {
+        recoverStamina();
+    }
+
 
     @Override
     public ArmoryInterface getAbility(int index) {
@@ -114,7 +143,7 @@ public class BarbarianClass extends Player{
             abilities.append(cont).append("-").append(weapon.name()).append(" | ");
             cont++;
         }
-        abilities.append(" 4-Describe Abilities");
+        abilities.append(" 0-Describe Abilities");
         System.out.println(abilities);
     }
 
@@ -130,5 +159,9 @@ public class BarbarianClass extends Player{
             System.out.print("━".repeat(30));
         }
         return Math.max(0, totalDamage - enemyDefense);
+    }
+
+    public int getWeaponListLength(){
+        return weaponsList.toArray().length;
     }
 }
