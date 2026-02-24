@@ -27,6 +27,47 @@ public class MageClass extends Player {
 
     }
 
+    private void recoverMana(){
+        if(isDefending()){
+            if(getMana() < getMaxMana() - manaRecover){
+                int totalMana = getMana() + manaRecover;
+                setMana(totalMana);
+            } else {
+                setMana(getMaxMana());
+            }
+        }
+    }
+    private void recoverStamina(){
+        if(isDefending()){
+            if(getStamina() < getMaxStamina() - staminaRecover){
+                int totalStamina = getStamina() + staminaRecover;
+                setStamina(totalStamina);
+            } else {
+                setStamina(getMaxStamina());
+            }
+        }
+    }
+
+    @Override
+    protected void recoverStatus() {
+        recoverMana();
+        recoverStamina();
+    }
+
+    @Override
+    public void defense(){
+
+        defending = true;
+        setDefense(getDefense() + bonusDefending);
+        recoverStatus();
+
+        System.out.println("━".repeat(82));
+        System.out.println(" ".repeat(5) + getName() + " started to defending, your defense was increased +" + bonusDefending + " by 1 turn");
+        System.out.println(" ".repeat(5) + "Recovered +" + staminaRecover + " points of stamina");
+        System.out.println(" ".repeat(5) + "Recovered +" + manaRecover + " points of mana");
+        System.out.println("━".repeat(82));
+    }
+
     @Override
     protected int calcDamage(ArmoryInterface weapon, int enemyDefense) {
         int damage = weapon.getDamage();
@@ -128,10 +169,12 @@ public class MageClass extends Player {
             abilities.append(cont).append("-").append(spell.name()).append(" | ");
             cont++;
         }
-        abilities.append(" 4-Describe Abilities");
+        abilities.append(" 0-Describe Abilities");
         System.out.println(abilities);
     }
 
-
+    public int getWeaponListLength(){
+        return spellsList.toArray().length;
+    }
 
 }
